@@ -5,35 +5,52 @@ from pandas.plotting import register_matplotlib_converters
 register_matplotlib_converters()
 
 # Import data (Make sure to parse dates. Consider setting index column to 'date'.)
-df = None
+df = pd.read_csv("fcc-forum-pageviews.csv", parse_dates=["date"]).set_index("date")
 
 # Clean data
-df = None
+df = df.drop(df[df["value"].quantile(0.025) > df["value"]].index)
+df = df.drop(df[df["value"].quantile(0.975) < df["value"]].index)
 
 
 def draw_line_plot():
-    # Draw line plot
+    # Create a new figure and axis
+    fig, ax = plt.subplots(figsize=(20, 5), dpi=100)
 
+    # Plot line plot
+    df.plot(ax=ax, color="red")
 
+    # Set labels and title
+    ax.set_xlabel("Date")
+    ax.set_ylabel("Page Views")
+    ax.set_title("Daily freeCodeCamp Forum Page Views 5/2016-12/2019")
 
-
-
-    # Save image and return fig (don't change this part)
+    # Save image
     fig.savefig('line_plot.png')
+    plt.close(fig)
+
     return fig
 
 def draw_bar_plot():
     # Copy and modify data for monthly bar plot
-    df_bar = None
-
+    df_bar = df.copy()
+    df_barbymonth = df_bar.resample("m").mean()
+    months = ["January",  "February", "March","April", "May", "June", "July", "August", "September", "October", "November", "December"]
+    df_barbymonth['months'] = pd.Categorical(df_barbymonth.index.strftime('%B'), categories=months, ordered=True)
+    dfp = pd.pivot_table(data=df_barbymonth, index=pd.DatetimeIndex(data=df_barbymonth.index).strftime("%Y"), columns='months', values='value')
+    
+    # Create a new figure
+    fig, ax = plt.subplots(figsize=(6, 5))
+    
     # Draw bar plot
-
-
-
-
-
-    # Save image and return fig (don't change this part)
+    dfp.plot(kind='bar', ax=ax)
+    ax.set_ylabel('Mean Page Views')
+    ax.set_xlabel('Year')
+    ax.legend(loc="upper left")
+    
+    # Save image
     fig.savefig('bar_plot.png')
+    plt.close(fig)
+
     return fig
 
 def draw_box_plot():
@@ -43,12 +60,15 @@ def draw_box_plot():
     df_box['year'] = [d.year for d in df_box.date]
     df_box['month'] = [d.strftime('%b') for d in df_box.date]
 
+    # Create a new figure
+    fig, ax = plt.subplots(figsize=(10, 6))
+
     # Draw box plots (using Seaborn)
+    sns.boxplot(x='year', y='value', data=df_box, ax=ax)
+    ax.ticklabel_format(style='plain', axis='y')
 
-
-
-
-
-    # Save image and return fig (don't change this part)
+    # Save image
     fig.savefig('box_plot.png')
+    plt.close(fig)
+
     return fig
