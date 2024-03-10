@@ -43,8 +43,8 @@ def draw_bar_plot():
     
     # Draw bar plot
     dfp.plot(kind='bar', ax=ax)
-    ax.set_ylabel('Mean Page Views')
-    ax.set_xlabel('Year')
+    ax.set_ylabel('Average Page Views')
+    ax.set_xlabel('Years')
     ax.legend(loc="upper left")
     
     # Save image

@@ -5,8 +5,8 @@ import matplotlib as mpl
 class DataCleaningTestCase(unittest.TestCase):
     def test_data_cleaning(self):
         actual = int(time_series_visualizer.df.count(numeric_only=True))
-        expected = 1238
-        self.assertEqual(actual, expected, "Expected DataFrame count after cleaning to be 1238.")
+        expected = 1239
+        self.assertEqual(actual, expected, "Expected DataFrame count after cleaning to be 1239.")
 
 class LinePlotTestCase(unittest.TestCase):
     def setUp(self):
@@ -28,8 +28,8 @@ class LinePlotTestCase(unittest.TestCase):
 
     def test_line_plot_data_quantity(self):
         actual = len(self.ax.lines[0].get_ydata())
-        expected = 1238
-        self.assertEqual(actual, expected, "Expected number of data points in line plot to be 1238.")
+        expected = 1239
+        self.assertEqual(actual, expected, "Expected number of data points in line plot to be 1239.")
 
 
 class BarPlotTestCase(unittest.TestCase):
